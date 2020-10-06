@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "627213640649",
+    "firebase_url": "https://speedway-menago.firebaseio.com",
+    "project_id": "speedway-menago",
+    "storage_bucket": "speedway-menago.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627213640649:android:4f36a6873dabf88e10be18",
+        "android_client_info": {
+          "package_name": "com.example.speedwaymenago"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627213640649-elc2p16n43mip8j3e7flj4tcpil86cfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.speedwaymenago",
+            "certificate_hash": "546b9a039e9bf6eb6b74aac3c440a066484c251d"
+          }
+        },
+        {
+          "client_id": "627213640649-pjivdnns12aer2534p1hkluept2gr8vi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC83lYFVCY4BFt_uTkXEP1C04b8YyfOJnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627213640649-pjivdnns12aer2534p1hkluept2gr8vi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
