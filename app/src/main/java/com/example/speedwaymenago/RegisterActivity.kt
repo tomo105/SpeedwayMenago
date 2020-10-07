@@ -5,16 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.speedwaymenago.db.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_register.*
-import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var ref: DatabaseReference
+    private lateinit var roleRef: DatabaseReference
+    private lateinit var userRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,38 +51,39 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun createUser(username: String, email: String, password: String) {
 
-        val intent = Intent(this, DashboardActivity::class.java)
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
 
                 if (task.isSuccessful) {            //create successful
-                    val firebase = FirebaseDatabase.getInstance()
-                    ref = firebase.getReference("Role")
-                    Log.e("Task", "successful added a user.")
-                    var firebaseInput = Role()
+                    val firebaseInstance = FirebaseDatabase.getInstance()
+                    userRef = firebaseInstance.getReference("User")
 
-                    if (username.equals("admin", ignoreCase = true)) {
-                        firebaseInput = Role("admin")
+                    val userRole: String = if (username == "admin") {
+                        "admin"
                     } else {
-                        firebaseInput = Role("user")
+                        "user"
                     }
 
-                    ref.child(auth.uid.toString()).setValue(firebaseInput)
+                    val user = User(username, email, userRole)
+                    userRef.child(auth.uid.toString()).setValue(user)
 
-                    ref.addValueEventListener(object : ValueEventListener {
+                    userRef.addValueEventListener(object : ValueEventListener {
                         override fun onCancelled(p0: DatabaseError) {
-                            Log.e("error", "error")
-                            Log.e("error", p0.message)
+                            Log.d("custom", "failed to add to User db")
+                            Log.d("custom", p0.message + " \n "  +p0.details)
                         }
 
                         override fun onDataChange(p0: DataSnapshot) {
-                            startActivity(intent)
+                            Log.d("custom", "added user to db User")
+                             val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                              startActivity(intent)
                             //change UI
                         }
                     })
 
+
                 } else {                                                                            // not successful
-                    Log.e("Task", "failed" + task.exception)
+                    Log.e("custom", "failed" + task.exception)
                     Toast.makeText(this, "Failed in registration", Toast.LENGTH_LONG).show()
                 }
             }

@@ -49,9 +49,6 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     checkUser()
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-
                 } else {
                     Toast.makeText(this, "Erorr" + task.exception, Toast.LENGTH_LONG).show()
                 }
@@ -64,24 +61,35 @@ class MainActivity : AppCompatActivity() {
         Log.d("check", registeredUserId + "reistered")
 
         val firebase = FirebaseDatabase.getInstance()
-        ref = firebase.getReference("Role")
+        ref = firebase.getReference("User")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
+                Log.d("custom", "failed to log in ")
+                Toast.makeText(
+                    this@MainActivity,
+                    "failed to login check, email or password",
+                    Toast.LENGTH_LONG
+                ).show()
 
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                val name = p0.value
-                val name2 = p0.child(registeredUserId.toString()).child("role").value
-                //  val value = p0.child()
-                Log.d("check", name.toString())
-                 Log.d("check", name2.toString())
+                val role = p0.child(registeredUserId.toString()).child("role").value
+                if (role != null) {
+                    if (role == "admin") {
+                        val intent = Intent(this@MainActivity, TableActivity::class.java)
+                        startActivity(intent)
+                    } else {
+
+                        val intent = Intent(this@MainActivity, DashboardActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+
             }
-
         })
-
-
     }
+
     //check if user is already logged in
 //    override fun onStart() {
 //        super.onStart()
