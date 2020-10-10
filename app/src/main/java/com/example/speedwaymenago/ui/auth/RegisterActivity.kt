@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedwaymenago.AdminActivity
 import com.example.speedwaymenago.R
 import com.example.speedwaymenago.db.User
+import com.example.speedwaymenago.ui.MainActivity
 import com.example.speedwaymenago.viewmodel.LoginRegisterViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -25,13 +25,15 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
-        loginRegisterViewModel = ViewModelProvider(this).get( LoginRegisterViewModel::class.java)
+        loginRegisterViewModel = ViewModelProvider(this).get(LoginRegisterViewModel::class.java)
 
-        tvLogin.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
+        menageUserRegistration()
 
+        menageLoginButton()
+
+    }
+
+    private fun menageUserRegistration() {
         btnRegister.setOnClickListener {
             val username = editUsername.text.trim().toString()
             val email = editEmail.text.trim().toString()
@@ -40,19 +42,18 @@ class RegisterActivity : AppCompatActivity() {
             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 Toast.makeText(this, "Input Provided", Toast.LENGTH_LONG).show()
                 loginRegisterViewModel.register(username, email, password)
-                // createUser(username, email, password)
+                startActivity(Intent(this, MainActivity::class.java))
             } else {
                 Toast.makeText(this, "Input Required", Toast.LENGTH_LONG).show()
             }
-
         }
+    }
 
-
+    private fun menageLoginButton() {
         tvLogin.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
     }
 
 
@@ -65,13 +66,7 @@ class RegisterActivity : AppCompatActivity() {
                     val firebaseInstance = FirebaseDatabase.getInstance()
                     userRef = firebaseInstance.getReference("User")
 
-                    val userRole: String = if (username == "admin") {
-                        "admin"
-                    } else {
-                        "user"
-                    }
-
-                    val user = User(username, email, userRole)
+                    val user = User(username, email)
                     userRef.child(auth.uid.toString()).setValue(user)
 
                     userRef.addValueEventListener(object : ValueEventListener {

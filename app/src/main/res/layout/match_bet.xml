@@ -1,45 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="-48dp"
+    tools:layout_editor_absoluteY="99dp">
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/firstTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/firstTeamScore"
-        app:layout_constraintStart_toEndOf="@+id/secondTeam"
+        android:text="first team "
+        app:layout_constraintEnd_toStartOf="@+id/secondTeam"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/firstTeamScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toStartOf="@id/secondTeam"
-        app:layout_constraintStart_toEndOf="@id/firstTeam"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/secondTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/firstTeam"
-        app:layout_constraintStart_toEndOf="@id/firstTeamScore"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="second team"
+
+        app:layout_constraintEnd_toStartOf="@+id/appCompatRadioButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstTeam"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--    <com.google.android.material.textfield.TextInputEditText-->
+    <!--        android:id="@+id/firstTeamScore"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:inputType="numberDecimal"-->
+    <!--        android:text="0"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/secondTeam"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/secondTeamScore"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:inputType="numberDecimal"-->
+    <!--        android:text="0"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/firstTeamScore"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
     <TextView
-        android:id="@+id/secondTeamScore"
+        android:id="@+id/firstRider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/secondTeamScore"
+        android:text="zawodnik A"
+        app:layout_constraintEnd_toStartOf="@+id/secondRider"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/firstTeam" />
+
+    <TextView
+        android:id="@+id/secondRider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="zawodnik B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstRider"
+        app:layout_constraintTop_toBottomOf="@id/secondTeam" />
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/appCompatRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/secondRider"
+        app:layout_constraintTop_toBottomOf="@id/firstTeam" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CheckBox"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="211dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CheckBox"
+        tools:layout_editor_absoluteX="242dp"
+        tools:layout_editor_absoluteY="243dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

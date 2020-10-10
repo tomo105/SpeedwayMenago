@@ -1,4 +1,4 @@
-package com.example.speedwaymenago.ui.auth
+package com.example.speedwaymenago.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +8,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.speedwaymenago.AdminActivity
-import com.example.speedwaymenago.ui.DashboardActivity
 import com.example.speedwaymenago.R
+import com.example.speedwaymenago.ui.auth.RegisterActivity
+import com.example.speedwaymenago.ui.loggedIn.DashboardActivity
 import com.example.speedwaymenago.viewmodel.LoginRegisterViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -24,52 +25,62 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loginRegisterViewModel = ViewModelProvider(this).get( LoginRegisterViewModel::class.java)
 
+        loginRegisterViewModel = ViewModelProvider(this).get(LoginRegisterViewModel::class.java)
         auth = FirebaseAuth.getInstance()
 
-        btnLogin.setOnClickListener {
-            if (editEmailLogin.text.trim().toString().isNotEmpty() && editPasswordLogin.text.trim()
-                    .toString().isNotEmpty()
-            ) {
-                //  signInUser(editEmailLogin.text.trim().toString(), editPasswordLogin.text.trim().toString())
-                loginRegisterViewModel.login(
-                    editEmailLogin.text.trim().toString(),
-                    editPasswordLogin.text.trim().toString()
-                )
-//                loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
-//                    user.uid
-//                } )
+        loginUser()
+        //  observeUser()    //observe current FirebaseUser  ???
+        manageRegistrationButton()
 
-//                val intent = Intent(this, DashboardActivity::class.java)
-//                startActivity(intent)
-            } else {
-                Toast.makeText(this, "input required", Toast.LENGTH_LONG).show()
-            }
+    }
 
-            loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
-                if( user.email =="tomo105@wp.pl") {
-                    val intent = Intent(this, AdminActivity::class.java)
-                    startActivity(intent)
-                }
-                else {
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-                }
-                Log.d("custom", "Logged user with email= " + user.email.toString())
-                Log.d("custom", "Logged user with name= " + user.displayName)
-            })
-
-        }
-
-
+    private fun manageRegistrationButton() {
         tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
     }
- ///---------------------------------------------------------------------------------
+
+    private fun loginUser() {
+        btnLogin.setOnClickListener {
+            if (editEmailLogin.text.trim().toString().isNotEmpty() && editPasswordLogin.text.trim()
+                    .toString().isNotEmpty()
+            ) {
+
+                loginRegisterViewModel.login(
+                    editEmailLogin.text.trim().toString(),
+                    editPasswordLogin.text.trim().toString()
+                )
+
+                //                loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
+                //                    user.uid
+                //                } )
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Login input required!", Toast.LENGTH_LONG).show()
+            }
+
+        }
+    }
+
+    private fun observeUser() {
+        loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
+            if (user.email == "some email") {
+                val intent = Intent(this, AdminActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+            }
+
+            Log.d("custom", "provided data" + user.providerData)
+            Log.d("custom", "provided data" + user.providerId)
+        })
+    }
+
+    ///---------------------------------------------------------------------------------
     private fun signInUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -116,14 +127,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    //check if user is already logged in
-//    override fun onStart() {
-//        super.onStart()
-//        val user = auth.currentUser
-//
-//        if (user != null) {
-//            var intent = Intent(this, DashboardActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
+    // check if user is already logged in
+    override fun onStart() {
+        super.onStart()
+        val user = auth.currentUser
+
+        if (user != null) {
+            Log.d("custom", "User logged in ")
+            var intent = Intent(this, DashboardActivity::class.java)
+            startActivity(intent)
+        } else {
+            Log.d("custom", "User is not logged in ")
+        }
+    }
+
 }

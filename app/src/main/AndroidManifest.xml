@@ -13,8 +13,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".AdminActivity"></activity>
         <activity android:name=".ui.auth.RegisterActivity" />
-        <activity android:name=".ui.DashboardActivity" />
-        <activity android:name=".ui.auth.MainActivity">
+        <activity android:name=".ui.loggedIn.DashboardActivity" />
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -11,53 +11,11 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
 
 
-//class AuthAppRepository(private val application: Application) {
-//    private val firebaseAuth: FirebaseAuth by lazy {
-//        FirebaseAuth.getInstance()
-//    }
-//    private lateinit var userLiveData: MutableLiveData<FirebaseUser>
-//    private lateinit var loggedOutLiveData: MutableLiveData<Boolean>
-//
-//    fun register(email: String, password: String) {
-//        firebaseAuth.createUserWithEmailAndPassword(email, password)
-//            .addOnCompleteListener() { task ->
-//                if (task.isSuccessful) {
-//                    userLiveData.value = firebaseAuth.currentUser
-//
-//                } else {                                                                            // not successful
-//                    Log.e("custom", "failed" + task.exception)
-//                    Toast.makeText(application, "Failed in registration", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//    }
-//
-//    fun login(email: String, password: String) {
-//        firebaseAuth.signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener() { task ->
-//                if (task.isSuccessful) {
-//                    userLiveData.value= firebaseAuth.currentUser
-//                } else {
-//                    Toast.makeText(application, "Login Failure: " + task.exception!!.message, Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
-//
-//    fun logout() {
-//        firebaseAuth.signOut()
-//        loggedOutLiveData.value = false
-//    }
-//
-//    fun isLoggedOutLiveData() = loggedOutLiveData
-//
-//    fun currentUser() = userLiveData
-//
-//
-//}
 class AuthAppRepository(private val application: Application) {
-    val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var userDbRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
 
-    var userLiveData: MutableLiveData<FirebaseUser> = MutableLiveData()
+    var currentUserLiveData: MutableLiveData<FirebaseUser> = MutableLiveData()
     private val loggedOutLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
     fun login(email: String, password: String) {
@@ -65,56 +23,24 @@ class AuthAppRepository(private val application: Application) {
             .addOnCompleteListener()
             { task ->
                 if (task.isSuccessful) {
-                    //   userLiveData.postValue(firebaseAuth.currentUser)
-                    userLiveData.postValue(firebaseAuth.currentUser)
-//                    Log.d("custom", "Logged user with email= " + userLiveData.value!!.email.toString())
-//                    Log.d("custom", "Logged user with name= " + userLiveData.value!!.displayName)
-//                    val firebase = FirebaseDatabase.getInstance()
-//                    userDbRef = firebase.getReference("User")
-//
-//                    userDbRef.addValueEventListener(object : ValueEventListener {
-//                        override fun onCancelled(p0: DatabaseError) {
-//                            Log.d("custom", "failed to log in ")
-//                            Toast.makeText(
-//                                application.applicationContext,
-//                                "failed to login check, email or password",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//
-//                        override fun onDataChange(p0: DataSnapshot) {
-//                            val role = p0.child(registeredUserId.toString()).child("role").value
-////                            if (role != null) {
-////                                if (role == "admin") {
-////                                  //  val intent =
-////                                    startActivity(application.applicationContext,Intent(application.applicationContext, AdminActivity::class.java))
-////                                } else {
-////                                   // val intent = Intent(, DashboardActivity::class.java)
-////                                    //startActivity(application.applicationContext,intent)
-////                                }
-////                            }
-
-                    //        }
-                    //    })
-                    //
+                    Log.d("custom", "token : " + firebaseAuth.currentUser!!.getIdToken(true).toString())
+                    Log.d("custom", "Logged user with email= " + firebaseAuth.currentUser!!.email)
+                    Log.d("custom", "Logged user with name= " + firebaseAuth.currentUser!!.displayName)
+                    currentUserLiveData.postValue(firebaseAuth.currentUser)
                 } else {
-                    Log.d("custom", "log in error: " + task.exception!!.message )
-                    Toast.makeText(
-                        application.applicationContext,
-                        "Login Failure: " + task.exception!!.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d("custom", "log in error: " + task.exception!!.message)
+                    Toast.makeText(application.applicationContext, "Login Failure: " + task.exception!!.message, Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
     fun register(username: String, email: String, password: String) {
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
-                    userLiveData.postValue(firebaseAuth.currentUser)
-                    updateUserNameInProfile(username)
+                    currentUserLiveData.postValue(firebaseAuth.currentUser)
+                    firebaseAuth.getAccessToken(true)
+                    updateUserDisplayNameInProfile(username)
                     addUserInfoToDb(username, email)
                 } else {                                                                            // not successful
                     Log.e("custom", "failed" + task.exception)
@@ -124,14 +50,7 @@ class AuthAppRepository(private val application: Application) {
     }
 
     private fun addUserInfoToDb(username: String, email: String) {
-        val userRole: String = if (username == "admin") {
-            "admin"
-        } else {
-            "user"
-        }
-
-
-        val user = User(username, email, userRole)
+        val user = User(username, email)
         userDbRef.child(firebaseAuth.uid.toString()).setValue(user)
 
         userDbRef.addValueEventListener(object : ValueEventListener {
@@ -141,28 +60,30 @@ class AuthAppRepository(private val application: Application) {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("custom", "added user to db User")
+                Log.d("custom", "User added to db User")
             }
         })
     }
 
-    private fun updateUserNameInProfile(username: String) {
+    private fun updateUserDisplayNameInProfile(username: String) {
         val profileUpdates =
             UserProfileChangeRequest.Builder()
-                .setDisplayName(username).build()
+                .setDisplayName(username)
+                .build()
 
         firebaseAuth.currentUser!!.updateProfile(profileUpdates)
+
     }
 
     fun logOut() {
         firebaseAuth.signOut()
-        userLiveData.postValue(null)
+        //currentUserLiveData.postValue(null)   //???
         loggedOutLiveData.postValue(true)
     }
 
     init {
         if (firebaseAuth.currentUser != null) {
-            userLiveData.postValue(firebaseAuth.currentUser)
+            currentUserLiveData.postValue(firebaseAuth.currentUser)
             loggedOutLiveData.postValue(false)
         }
     }

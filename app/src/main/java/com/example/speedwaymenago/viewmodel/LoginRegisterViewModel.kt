@@ -1,7 +1,6 @@
 package com.example.speedwaymenago.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,20 +13,17 @@ class LoginRegisterViewModel(application: Application) : AndroidViewModel(applic
     private val authAppRepository: AuthAppRepository = AuthAppRepository(application)
     val userLiveData: MutableLiveData<FirebaseUser>
 
-    fun login(email: String, password: String) =viewModelScope.launch{
+    fun login(email: String, password: String) {
         authAppRepository.login(email, password)
-       // if (userLiveData.value!!.email == "tomo105@wp.pl") {
-         //   Log.d("custom","moze tak ??? \n ${userLiveData.value!!.email}")
-       // }
     }
 
-    fun register(username: String, email: String, password: String) =viewModelScope.launch{
+    fun register(username: String, email: String, password: String) {
         authAppRepository.register(username, email, password)
     }
-    fun logout()= viewModelScope.launch {
+    fun logout() {
         authAppRepository.logOut()
     }
     init {
-        userLiveData = authAppRepository.userLiveData
+        userLiveData = authAppRepository.currentUserLiveData
     }
 }
