@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedwaymenago.AdminActivity
+import com.example.speedwaymenago.ui.admin.AdminActivity
 import com.example.speedwaymenago.R
 import com.example.speedwaymenago.ui.auth.RegisterActivity
 import com.example.speedwaymenago.ui.loggedIn.DashboardActivity
@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         loginUser()
-        //  observeUser()    //observe current FirebaseUser  ???
         manageRegistrationButton()
 
     }
@@ -44,20 +43,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun loginUser() {
         btnLogin.setOnClickListener {
-            if (editEmailLogin.text.trim().toString().isNotEmpty() && editPasswordLogin.text.trim()
-                    .toString().isNotEmpty()
-            ) {
 
-                loginRegisterViewModel.login(
-                    editEmailLogin.text.trim().toString(),
-                    editPasswordLogin.text.trim().toString()
-                )
-
-                //                loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
-                //                    user.uid
-                //                } )
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
+            if (editEmailLogin.text.trim().toString().isNotEmpty() && editPasswordLogin.text.trim().toString().isNotEmpty())
+            {
+                loginRegisterViewModel.login(editEmailLogin.text.trim().toString(), editPasswordLogin.text.trim().toString())
+                redirectUser()
             } else {
                 Toast.makeText(this, "Login input required!", Toast.LENGTH_LONG).show()
             }
@@ -65,9 +55,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeUser() {
+    private fun redirectUser() {
         loginRegisterViewModel.userLiveData.observe(this, Observer { user ->
-            if (user.email == "some email") {
+            if (user.email == "tomo105@wp.pl") {
                 val intent = Intent(this, AdminActivity::class.java)
                 startActivity(intent)
             } else {
@@ -128,17 +118,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     // check if user is already logged in
-    override fun onStart() {
-        super.onStart()
-        val user = auth.currentUser
-
-        if (user != null) {
-            Log.d("custom", "User logged in ")
-            var intent = Intent(this, DashboardActivity::class.java)
-            startActivity(intent)
-        } else {
-            Log.d("custom", "User is not logged in ")
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        val user = auth.currentUser
+//
+//        if (user != null) {
+//            Log.d("custom", "User logged in ")
+//            var intent = Intent(this, DashboardActivity::class.java)
+//            startActivity(intent)
+//        } else {
+//            Log.d("custom", "User is not logged in ")
+//        }
+//    }
 
 }

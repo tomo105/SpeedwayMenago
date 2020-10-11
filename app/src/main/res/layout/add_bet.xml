@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="text"
-        android:text="team A"
+        android:hint="team A"
         app:layout_constraintEnd_toStartOf="@+id/teamB"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="text"
-        android:text="team B"
+        android:hint="team B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/teamA"
@@ -52,27 +52,27 @@
         app:layout_constraintTop_toBottomOf="@id/teamA" />
 
     <EditText
-        android:id="@+id/riderA"
+        android:id="@+id/riderPvP1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="text"
-        android:text="rider A"
-        app:layout_constraintEnd_toStartOf="@+id/riderB"
+        android:hint="rider A"
+        app:layout_constraintEnd_toStartOf="@+id/riderPvP2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text2" />
 
     <EditText
-        android:id="@+id/riderB"
+        android:id="@+id/riderPvP2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="text"
-        android:text="rider B"
+        android:hint="rider B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/riderA"
+        app:layout_constraintStart_toEndOf="@+id/riderPvP1"
         app:layout_constraintTop_toBottomOf="@id/text2" />
 
     <TextView
@@ -85,15 +85,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/riderA" />
+        app:layout_constraintTop_toBottomOf="@id/riderPvP1" />
 
     <EditText
-        android:id="@+id/riderC"
+        android:id="@+id/riderPointsMoreLess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="text"
-        android:text="rider C"
+        android:hint="rider C"
         app:layout_constraintEnd_toStartOf="@+id/points"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,12 +105,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="numberDecimal"
-        android:text="rider B"
+        android:hint="score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/riderC"
+        app:layout_constraintStart_toEndOf="@+id/riderPointsMoreLess"
         app:layout_constraintTop_toBottomOf="@id/text3" />
-
+    <EditText
+        android:id="@+id/betsName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:inputType="numberDecimal"
+        android:hint=" round number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/riderPointsMoreLess" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddBet"
         android:layout_width="wrap_content"
@@ -119,5 +129,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/riderC" />
+        app:layout_constraintTop_toBottomOf="@id/riderPointsMoreLess" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabShowBet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/riderPointsMoreLess" />
 </androidx.constraintlayout.widget.ConstraintLayout>

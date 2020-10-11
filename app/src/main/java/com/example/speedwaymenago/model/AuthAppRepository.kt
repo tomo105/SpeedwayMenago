@@ -18,6 +18,13 @@ class AuthAppRepository(private val application: Application) {
     var currentUserLiveData: MutableLiveData<FirebaseUser> = MutableLiveData()
     private val loggedOutLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
+    init {
+        if (firebaseAuth.currentUser != null) {
+            currentUserLiveData.postValue(firebaseAuth.currentUser)
+            loggedOutLiveData.postValue(false)
+        }
+    }
+
     fun login(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener()
@@ -72,7 +79,6 @@ class AuthAppRepository(private val application: Application) {
                 .build()
 
         firebaseAuth.currentUser!!.updateProfile(profileUpdates)
-
     }
 
     fun logOut() {
@@ -81,10 +87,5 @@ class AuthAppRepository(private val application: Application) {
         loggedOutLiveData.postValue(true)
     }
 
-    init {
-        if (firebaseAuth.currentUser != null) {
-            currentUserLiveData.postValue(firebaseAuth.currentUser)
-            loggedOutLiveData.postValue(false)
-        }
-    }
+
 }
